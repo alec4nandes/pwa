@@ -1,3 +1,6 @@
+firebase.js
+service-worker.js
+notifications.js
 database.js
 service-account-key.json
 
