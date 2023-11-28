@@ -10,12 +10,26 @@ admin.initializeApp({
 });
 
 const app = express(),
-    user = (desiredPath, realPath) =>
+    setUse = (desiredPath, realPath) =>
         app.use(desiredPath, express.static(path.join(__dirname, realPath)));
 
-user("/assets", "/assets");
-user("/service-worker.js", "/public/service-worker.js");
-user("/firebase.js", "/public/firebase.js");
+setUse("/assets", "/assets");
+setUse("/service-worker.js", "/public/service-worker.js");
+setUse("/firebase.js", "/public/firebase.js");
+
+const pwaFilesInIndex = [
+    "apple-touch-icon.png",
+    "favicon-32x32.png",
+    "favicon-16x16.png",
+    "manifest.json",
+    "safari-pinned-tab.svg",
+    "favicon.ico",
+    "mstile-144x144.png",
+    "browserconfig.xml",
+    "style.css",
+];
+
+pwaFilesInIndex.forEach((file) => setUse(`/${file}`, `/pwa/${file}`));
 
 app.get("/", (req, res) => mustHaveToken(req, res, true));
 app.get("/profile", (req, res) => mustHaveToken(req, res, false));
