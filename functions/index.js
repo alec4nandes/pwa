@@ -2,7 +2,8 @@ const admin = require("firebase-admin"),
     serviceAccount = require("./service-account-key.json"),
     express = require("express"),
     functions = require("firebase-functions"),
-    path = require("path");
+    path = require("path"),
+    { pushApi } = require("./push-server.js");
 
 // The Firebase Admin SDK is used here to verify the ID token.
 admin.initializeApp({
@@ -16,7 +17,7 @@ const app = express(),
 setUse("/assets", "/assets");
 setUse("/service-worker.js", "/public/service-worker.js");
 setUse("/firebase.js", "/public/firebase.js");
-
+setUse("/notifications.js", "/public/notifications.js");
 const pwaFilesInIndex = [
     "apple-touch-icon.png",
     "favicon-32x32.png",
@@ -27,19 +28,23 @@ const pwaFilesInIndex = [
     "mstile-144x144.png",
     "browserconfig.xml",
     "style.css",
+    "android-chrome-144x144.png",
 ];
-
 pwaFilesInIndex.forEach((file) => setUse(`/${file}`, `/pwa/${file}`));
+app.set("view engine", "pug");
 
 app.get("/", (req, res) => mustHaveToken(req, res, true));
 app.get("/profile", (req, res) => mustHaveToken(req, res, false));
 
 async function mustHaveToken(req, res, isHome) {
-    const token = readToken(req);
-    if (token && (await verifyToken(token))) {
+    const token = readToken(req),
+        email = token && (await getEmailFromToken(token));
+    if (email) {
         isHome
             ? res.redirect("./profile")
-            : res.sendFile(path.join(__dirname, "/public/profile.html"));
+            : res.render(path.join(__dirname, "/public/profile.pug"), {
+                  email,
+              });
     } else {
         isHome
             ? res.sendFile(path.join(__dirname, "/public/index.html"))
@@ -53,14 +58,17 @@ function readToken(req) {
     return components.length > 1 ? components[1] : "";
 }
 
-async function verifyToken(token) {
+async function getEmailFromToken(token) {
     try {
-        await admin.auth().verifyIdToken(token);
-        return true;
+        const decoded = await admin.auth().verifyIdToken(token);
+        return decoded.email;
     } catch (err) {
         console.error(err);
         return false;
     }
 }
 
-module.exports = { express: functions.https.onRequest(app) };
+module.exports = {
+    express: functions.https.onRequest(app),
+    push: functions.https.onRequest(pushApi),
+};
