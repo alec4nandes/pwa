@@ -27,17 +27,18 @@ async function fetcher(event) {
         validProtocol = protocol == "https:" || hostname == "localhost",
         sameOrigin = origin == reqOrigin && validProtocol;
     if (sameOrigin) {
-        const headers = setHeaders(req, token);
+        const headers = setHeaders(req, token),
+            body = await getBodyContent(req);
         return fetch(
             new Request(req.url, {
                 method: req.method,
                 headers,
                 mode: "same-origin",
                 credentials: req.credentials,
-                // cache: req.cache,
+                cache: req.cache,
                 redirect: req.redirect,
                 referrer: req.referrer,
-                // body,
+                body,
             })
         );
     } else {
@@ -71,8 +72,48 @@ function setHeaders(req, token) {
     return headers;
 }
 
+// Get underlying body if available. Works for text and json bodies.
+async function getBodyContent(req) {
+    return Promise.resolve()
+        .then(() => {
+            if (req.method !== "GET") {
+                if (req.headers.get("Content-Type").indexOf("json") !== -1) {
+                    return req.json().then((json) => {
+                        return JSON.stringify(json);
+                    });
+                } else {
+                    return req.text();
+                }
+            }
+        })
+        .catch((error) => {
+            // Ignore error.
+        });
+}
+
 self.addEventListener("activate", (event) => {
     event.waitUntil(clients.claim());
 });
+
+self.addEventListener("push", function (event) {
+    if (event.data) {
+        console.log("Push event:", event.data.text());
+        showLocalNotification(
+            "Today is Uposatha",
+            event.data.text(),
+            self.registration
+        );
+    } else {
+        console.warn("Push event, but no data.");
+    }
+});
+
+function showLocalNotification(title, body, swRegistration) {
+    const options = {
+        // here you can add more properties like icon, image, vibrate, etc.
+        body,
+    };
+    swRegistration.showNotification(title, options);
+}
 
 export { getToken };

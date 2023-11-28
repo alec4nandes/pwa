@@ -31,3 +31,5 @@ async function handleLogOut() {
         window.location.assign("./");
     }, 1000);
 }
+
+export { elem };
