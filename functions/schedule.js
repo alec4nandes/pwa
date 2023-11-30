@@ -44,53 +44,12 @@ async function pushToUser(subscription) {
 
 /* **************** */
 
-// The Cloud Functions for Firebase SDK to set up triggers and logging.
-const { onSchedule } = require("firebase-functions/v2/scheduler");
 // Imports the Google Cloud Tasks library.
-
-// ALREADY INITIALIZED in index.js
-// The Firebase Admin SDK to delete inactive users.
-// const admin = require("firebase-admin");
-// admin.initializeApp();
-
-// The es6-promise-pool to limit the concurrency of promises.
-const PromisePool = require("es6-promise-pool").default;
-// Maximum concurrent account deletions.
-const MAX_CONCURRENT = 3;
-
-// Run once a day at midnight, to clean up the users
-// Manually run the task here https://console.cloud.google.com/cloudscheduler
-// TODO: implement:
-// LOGIC: every [n] days, run this function that checks when the next full or new moon is.
-// Find the earliest timezone in UTC, and find the offset from Date.now().
-// Pass moonType, timeOffset, and timeZone as params to createHttpTask() [rename!]
-
-// exports.accountcleanup = onSchedule("every day 00:00", async (event) => {
-//     // Use a pool so that we delete maximum `MAX_CONCURRENT` users in parallel.
-//     const promisePool = new PromisePool(
-//         () => createHttpTask(),
-//         MAX_CONCURRENT
-//     );
-//     await promisePool.start();
-
-//     logger.log("User cleanup finished");
-// });
-
-// exports.scheduledFunctionCrontab = onSchedule("5 11 * * *", async (event) => {
-//     // ...
-// });
-
-/* **************** */
-
 const { CloudTasksClient } = require("@google-cloud/tasks");
-
 // Instantiates a client.
-// TODO: enable and incorporate in scheduled function
-// const client = new CloudTasksClient();
+const client = new CloudTasksClient();
 
-// createHttpTask();
-
-async function createHttpTask() {
+async function scheduledPush() {
     const project = "express-10101";
     const queue = "my-queue";
     const location = "us-central1";
@@ -130,6 +89,6 @@ async function createHttpTask() {
     console.log(`Created task ${response.name}`);
 }
 
-/* **************** */
+// function getData()
 
-module.exports = { createHttpTask, schedule };
+module.exports = { schedule, scheduledPush };
