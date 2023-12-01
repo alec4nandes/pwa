@@ -39,7 +39,7 @@ async function addTask({ coordinates, subscription }) {
                 httpRequest: {
                     url,
                     headers: {
-                        "Content-Type": "text/plain", // Set content type to ensure compatibility your application's request parsing
+                        "Content-Type": "application/json",
                     },
                     httpMethod: "POST",
                     body: Buffer.from(JSON.stringify(payload)).toString(
