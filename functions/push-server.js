@@ -16,14 +16,7 @@ pushApi.use(cors({ credentials: true }));
 pushApi.use(bodyParser.json());
 
 pushApi.post("/", (req, res) => {
-    const { subscription } = req.body,
-        sunrise = `6am`,
-        sunset = "6pm",
-        goals = ["fasting", "no smoking"],
-        s = goals.length > 1 ? "s" : "",
-        message = `sunrise: ${sunrise}; sunset: ${sunset}; effort${s}: ${goals.join(
-            ", "
-        )}`;
+    const { subscription, message } = req.body;
     console.log(subscription);
     webpush.sendNotification(subscription, message);
     res.json({ message: "message sent" });

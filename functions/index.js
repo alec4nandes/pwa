@@ -4,7 +4,7 @@ const admin = require("firebase-admin"),
     functions = require("firebase-functions"),
     path = require("path"),
     { pushApi } = require("./push-server.js"),
-    { schedule, scheduledPush } = require("./schedule.js");
+    { scheduledPush } = require("./schedule.js");
 
 // The Firebase Admin SDK is used here to verify the ID token.
 admin.initializeApp({
@@ -71,16 +71,15 @@ async function getEmailFromToken(token) {
 
 /* ****************** */
 
-const scheduledFunction = functions.pubsub
-    .schedule("0 0 * * *")
-    // .timeZone("America/Los Angeles")
+const schedule = functions.pubsub
+    .schedule("0 0 * * *") // midnight every night
+    // .timeZone("UTC")
     .onRun((context) => {
-        scheduledPush();
+        return scheduledPush();
     });
 
 module.exports = {
     express: functions.https.onRequest(app),
     push: functions.https.onRequest(pushApi),
-    schedule: functions.https.onRequest(schedule),
-    scheduledFunction,
+    schedule,
 };
