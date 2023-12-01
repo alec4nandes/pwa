@@ -1,27 +1,53 @@
 import { auth } from "./database.js";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    sendEmailVerification,
+    signInWithEmailAndPassword,
+    signOut,
+} from "firebase/auth";
 
-if (elem("login")) {
-    elem("login-btn").onclick = handleLogin;
-} else if (elem("logout-btn")) {
-    elem("logout-btn").onclick = handleLogOut;
+addHandler("signup-btn", handleSignup);
+addHandler("login-btn", handleLogin);
+addHandler("logout-btn", handleLogOut);
+addHandler("resend-verify-btn", handleResendVerify);
+
+function addHandler(id, func) {
+    if (elem(id)) {
+        elem(id).onclick = func;
+    }
 }
 
 function elem(id) {
     return document.querySelector(`#${id}`);
 }
 
-async function handleLogin() {
+async function handleSignup() {
+    signupLoginHelper(true);
+}
+
+function handleLogin() {
+    signupLoginHelper(false);
+}
+
+async function signupLoginHelper(isSignup) {
     try {
         const val = (id) => elem(id).value,
             email = val("email"),
             password = val("password"),
-            user = await signInWithEmailAndPassword(auth, email, password);
+            func = isSignup
+                ? createUserWithEmailAndPassword
+                : signInWithEmailAndPassword,
+            { user } = await func(auth, email, password);
+        isSignup &&
+            (await sendEmailVerification(user, {
+                url: "https://us-central1-express-10101.cloudfunctions.net/express/",
+            }));
         setTimeout(() => {
             window.location.assign("profile");
         }, 1000);
     } catch (err) {
-        alert(err.message);
+        elem("error").textContent = err.message;
+        console.error(err);
     }
 }
 
@@ -30,6 +56,16 @@ async function handleLogOut() {
     setTimeout(() => {
         window.location.assign("./");
     }, 1000);
+}
+
+async function handleResendVerify() {
+    try {
+        await sendEmailVerification(auth.currentUser);
+        alert("Email sent!");
+    } catch (err) {
+        console.error(err);
+        alert(err.message);
+    }
 }
 
 export { elem };

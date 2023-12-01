@@ -39,13 +39,20 @@ app.get("/profile", (req, res) => mustHaveToken(req, res, false));
 
 async function mustHaveToken(req, res, isHome) {
     const token = readToken(req),
-        email = token && (await getEmailFromToken(token));
+        user = token && (await getUserFromToken(token)),
+        { email, email_verified } = user || {};
     if (email) {
-        isHome
-            ? res.redirect("./profile")
-            : res.render(path.join(__dirname, "/public/profile.pug"), {
-                  email,
-              });
+        if (email_verified) {
+            isHome
+                ? res.redirect("./profile")
+                : res.render(path.join(__dirname, "/public/profile.pug"), {
+                      email,
+                  });
+        } else {
+            res.render(path.join(__dirname, "/public/unverified.pug"), {
+                email,
+            });
+        }
     } else {
         isHome
             ? res.sendFile(path.join(__dirname, "/public/index.html"))
@@ -59,10 +66,9 @@ function readToken(req) {
     return components.length > 1 ? components[1] : "";
 }
 
-async function getEmailFromToken(token) {
+async function getUserFromToken(token) {
     try {
-        const decoded = await admin.auth().verifyIdToken(token);
-        return decoded.email;
+        return await admin.auth().verifyIdToken(token);
     } catch (err) {
         console.error(err);
         return false;

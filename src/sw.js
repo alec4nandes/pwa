@@ -1,7 +1,7 @@
 import { auth } from "./database.js";
 import { getIdToken, onAuthStateChanged } from "firebase/auth";
 
-const cacheName = "cache5",
+const cacheName = "cache10",
     precachedAssets = [];
 
 self.addEventListener("install", (event) => {
