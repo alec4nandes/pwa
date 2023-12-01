@@ -21,14 +21,19 @@ navigator.permissions
 async function toggle(status) {
     const email = elem("email-display").textContent,
         hasSubscription = !!(await getDataField(email, "subscription")),
-        isGranted = hasSubscription && status.state === "granted";
+        isGranted = hasSubscription && status.state === "granted",
+        coordinates = await getDataField(email, "coordinates"),
+        { latitude, longitude } = coordinates;
     elem("subscribe").style.display = isGranted ? "none" : "block";
     elem("unsubscribe").style.display = isGranted ? "block" : "none";
     if (isGranted) {
-        const coordinates = await getDataField(email, "coordinates"),
-            { latitude, longitude } = coordinates,
-            message = `Subscribed to push notifications for data at latitude: ${latitude}, longitude: ${longitude}.`;
-        elem("unsubscribe").querySelector("span").textContent = message;
+        const message = "Subscribed to push notifications for data at:";
+        elem("unsubscribe").querySelector("p").textContent = message;
+        elem("db-lat").textContent = latitude;
+        elem("db-lng").textContent = longitude;
+    } else {
+        elem("lat").value = latitude;
+        elem("lng").value = longitude;
     }
 }
 
@@ -37,20 +42,10 @@ async function getDataField(email, field) {
     return data?.[field];
 }
 
-setCoords();
 addHandler("notify-btn", handleSubscribe);
 addHandler("push-to-all", pushToAllUsers);
 addHandler("unsub-btn", handleUnsubscribe);
-
-async function setCoords() {
-    if (elem("lat") && elem("lng")) {
-        const email = elem("email-display").textContent,
-            coordinates = await getDataField(email, "coordinates"),
-            { latitude, longitude } = coordinates;
-        elem("lat").value = latitude;
-        elem("lng").value = longitude;
-    }
-}
+addHandler("coords-btn", handleLocalCoords);
 
 async function handleSubscribe() {
     try {
@@ -115,4 +110,22 @@ async function handleUnsubscribe() {
     });
     alert("Successfully unsubscribed.");
     window.location.reload();
+}
+
+async function handleLocalCoords() {
+    const { coords } = await getCoordinates(),
+        { latitude, longitude } = coords;
+    elem("lat").value = latitude;
+    elem("lng").value = longitude;
+}
+
+async function getCoordinates() {
+    try {
+        return await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+    } catch (err) {
+        console.error(err);
+        alert(err.message);
+    }
 }

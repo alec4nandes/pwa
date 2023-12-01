@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Profile</title>
         <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="./profile.css">
         <script src="firebase.js" defer></script>
         <script src="notifications.js" defer></script>
     </head>
@@ -15,16 +16,47 @@
         <button id="logout-btn">logout</button>
         <hr/>
         <div id="subscribe" style="display: none">
-            <input id="lat" value="0" type="number" min="-180" max="180" />
-            <input id="lng" value="0" type="number" min="-180" max="180" />        
+            <table id="coords-table">
+                <tr>
+                    <td colspan="2">
+                        <button id="coords-btn">detect coordinates</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="lat">latitude:</label>
+                    </td>
+                    <td>
+                        <input id="lat" value="0" type="number" min="-180" max="180" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="lng">longitude:</label>
+                    </td>
+                    <td id="btn-row">
+                        <input id="lng" value="0" type="number" min="-180" max="180" />
+                    </td>
+                </tr>
+            </table>
             <button id="notify-btn">GET NOTIFICATIONS</button>
         </div>
         <div id="unsubscribe" style="display: none">
-            <span></span>
+            <p></p>
+            <table id="coords-table">
+                <tr>
+                    <td>latitude:</td>
+                    <td id="db-lat"></td>
+                </tr>
+                <tr>
+                    <td>longitude:</td>
+                    <td id="db-lng"></td>
+                </tr>
+            </table>
             <button id="unsub-btn">UNSUBSCRIBE</button>
         </div>
         <button id="push-to-all">PUSH TO ALL</button>
         <hr/>
-        <img src="./assets/podbean8.jpg" alt="upsidedown palm tree" style="height: 300px; width: auto;">
+        <img src="./assets/podbean8.jpg" alt="upsidedown palm tree">
     </body>
 </html>

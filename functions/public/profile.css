@@ -1,0 +1,24 @@
+#email-display {
+    word-wrap: break-word;
+}
+
+img {
+    height: 100%;
+    max-height: auto;
+    max-width: 300px;
+    width: 100%;
+}
+
+#push-to-all {
+    margin-top: 20px;
+}
+
+#coords-table {
+    margin: auto;
+
+    & tr:not(#btn-row) {
+        & td:first-child {
+            text-align: right;
+        }
+    }
+}

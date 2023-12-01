@@ -19,6 +19,7 @@ setUse("/assets", "/assets");
 setUse("/service-worker.js", "/public/service-worker.js");
 setUse("/firebase.js", "/public/firebase.js");
 setUse("/notifications.js", "/public/notifications.js");
+setUse("/profile.css", "/public/profile.css");
 const pwaFilesInIndex = [
     "apple-touch-icon.png",
     "favicon-32x32.png",
