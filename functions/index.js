@@ -41,18 +41,12 @@ async function mustHaveToken(req, res, isHome) {
     const token = readToken(req),
         user = token && (await getUserFromToken(token)),
         { email, email_verified } = user || {};
-    if (email) {
-        if (email_verified) {
-            isHome
-                ? res.redirect("./profile")
-                : res.render(path.join(__dirname, "/public/profile.pug"), {
-                      email,
-                  });
-        } else {
-            res.render(path.join(__dirname, "/public/unverified.pug"), {
-                email,
-            });
-        }
+    if (email && email_verified) {
+        isHome
+            ? res.redirect("./profile")
+            : res.render(path.join(__dirname, "/public/profile.pug"), {
+                  email,
+              });
     } else {
         isHome
             ? res.sendFile(path.join(__dirname, "/public/index.html"))

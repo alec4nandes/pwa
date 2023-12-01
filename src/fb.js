@@ -9,7 +9,6 @@ import {
 addHandler("signup-btn", handleSignup);
 addHandler("login-btn", handleLogin);
 addHandler("logout-btn", handleLogOut);
-addHandler("resend-verify-btn", handleResendVerify);
 
 function addHandler(id, func) {
     if (elem(id)) {
@@ -38,20 +37,27 @@ async function signupLoginHelper(isSignup) {
                 ? createUserWithEmailAndPassword
                 : signInWithEmailAndPassword,
             { user } = await func(auth, email, password);
-        isSignup && (await sendVerify(user));
-        setTimeout(() => {
-            window.location.assign("profile");
-        }, 1000);
+        if (user.emailVerified) {
+            setTimeout(() => {
+                window.location.assign("profile");
+            }, 1000);
+        } else {
+            const message = `Please verify your email by clicking the link sent to ${user.email}, then sign in again.`;
+            if (isSignup) {
+                await sendEmailVerification(user);
+                alert(message);
+            } else {
+                const send = confirm(
+                    "This email address is not yet verified. Resend verification email?"
+                );
+                send && (await sendEmailVerification(user));
+            }
+            throw new Error(message);
+        }
     } catch (err) {
         elem("error").textContent = err.message;
         console.error(err);
     }
-}
-
-async function sendVerify(user) {
-    return await sendEmailVerification(user, {
-        url: "https://us-central1-express-10101.cloudfunctions.net/express/",
-    });
 }
 
 async function handleLogOut() {
@@ -59,16 +65,6 @@ async function handleLogOut() {
     setTimeout(() => {
         window.location.assign("./");
     }, 1000);
-}
-
-async function handleResendVerify() {
-    try {
-        await sendVerify(auth.currentUser);
-        alert("Email sent!");
-    } catch (err) {
-        console.error(err);
-        alert(err.message);
-    }
 }
 
 export { elem };
