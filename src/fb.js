@@ -38,10 +38,7 @@ async function signupLoginHelper(isSignup) {
                 ? createUserWithEmailAndPassword
                 : signInWithEmailAndPassword,
             { user } = await func(auth, email, password);
-        isSignup &&
-            (await sendEmailVerification(user, {
-                url: "https://us-central1-express-10101.cloudfunctions.net/express/",
-            }));
+        isSignup && (await sendVerify(user));
         setTimeout(() => {
             window.location.assign("profile");
         }, 1000);
@@ -49,6 +46,12 @@ async function signupLoginHelper(isSignup) {
         elem("error").textContent = err.message;
         console.error(err);
     }
+}
+
+async function sendVerify(user) {
+    return await sendEmailVerification(user, {
+        url: "https://us-central1-express-10101.cloudfunctions.net/express/",
+    });
 }
 
 async function handleLogOut() {
@@ -60,7 +63,7 @@ async function handleLogOut() {
 
 async function handleResendVerify() {
     try {
-        await sendEmailVerification(auth.currentUser);
+        await sendVerify(auth.currentUser);
         alert("Email sent!");
     } catch (err) {
         console.error(err);
