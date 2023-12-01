@@ -67,4 +67,4 @@ async function handleLogOut() {
     }, 1000);
 }
 
-export { elem };
+export { addHandler, elem };

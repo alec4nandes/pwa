@@ -22,7 +22,7 @@ async function pushToUser(subscription) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ subscription }),
+            body: JSON.stringify({ subscription, message: "TEST PUSH" }),
         });
     } catch (err) {
         console.error(err);

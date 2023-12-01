@@ -10,10 +10,19 @@
     </head>
     <body>
         <h1>Profile</h1>
-        <h2>#{email}</h2>
+        <!-- important for subscription (pulls textContent): -->
+        <h2 id="email-display">#{email}</h2>
         <button id="logout-btn">logout</button>
         <hr/>
-        <button id="notify-btn">GET NOTIFICATIONS</button>
+        <div id="subscribe" style="display: none">
+            <input id="lat" value="0" type="number" min="-180" max="180" />
+            <input id="lng" value="0" type="number" min="-180" max="180" />        
+            <button id="notify-btn">GET NOTIFICATIONS</button>
+        </div>
+        <div id="unsubscribe" style="display: none">
+            <span></span>
+            <button id="unsub-btn">UNSUBSCRIBE</button>
+        </div>
         <button id="push-to-all">PUSH TO ALL</button>
         <hr/>
         <img src="./assets/podbean8.jpg" alt="upsidedown palm tree" style="height: 300px; width: auto;">
