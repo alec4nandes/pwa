@@ -46,10 +46,5 @@ function showWelcome() {
 }
 
 function showInstallInstructions() {
-    document.querySelector("#install").innerHTML = `
-        You must download this web app to your device
-        to receive push notification reminders.
-        Follow these downloading directions:
-        ...
-    `;
+    document.querySelector("#install").style.display = "block";
 }

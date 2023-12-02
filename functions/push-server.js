@@ -16,10 +16,15 @@ pushApi.use(cors({ credentials: true }));
 pushApi.use(bodyParser.json());
 
 pushApi.post("/", (req, res) => {
-    const { subscription, message } = req.body;
-    console.log(subscription);
-    webpush.sendNotification(subscription, message);
-    res.json({ message: "message sent" });
+    try {
+        const { subscription, message } = req.body;
+        console.log("PUSH NOTIFICATION");
+        console.log(subscription);
+        webpush.sendNotification(subscription, message);
+        res.json({ message: "message sent" });
+    } catch (err) {
+        console.error(err);
+    }
 });
 
 module.exports = { pushApi };

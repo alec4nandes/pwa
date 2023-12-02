@@ -59,7 +59,18 @@
         <div id="welcome" class="vertical-flex" style="display: none">
             <div class="container">
                 <h1>Welcome!</h1>
-                <div id="install"></div>
+                <div id="install" style="display: none">
+                    <p>
+                        You must download this web app to your device
+                        to receive push notification reminders.
+                        Follow these downloading directions:
+                        ...
+                    </p>
+                    <p>
+                        Did you download, but you're still seeing this message? Please click this button: 
+                        <button onclick="window.location.reload()">refresh page</button>
+                    </p>
+                </div>
             </div>
         </div>
 
