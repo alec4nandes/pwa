@@ -11,8 +11,8 @@ import { pushToAllUsers } from "./push-client.js";
 
 navigator.permissions
     .query({ name: "notifications" })
-    .then((permissionStatus) => {
-        toggle(permissionStatus);
+    .then(async (permissionStatus) => {
+        await toggle(permissionStatus);
         permissionStatus.onchange = () => {
             toggle(permissionStatus);
         };
@@ -21,7 +21,7 @@ navigator.permissions
 async function toggle(status) {
     const email = elem("email-display").textContent,
         hasSubscription = !!(await getDataField(email, "subscription")),
-        isGranted = hasSubscription && status.state === "granted",
+        isGranted = hasSubscription && status.state !== "denied",
         coordinates = await getDataField(email, "coordinates"),
         { latitude, longitude } = coordinates;
     elem("subscribe").style.display = isGranted ? "none" : "block";
