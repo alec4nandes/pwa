@@ -17,6 +17,7 @@ const app = express(),
 
 setUse("/assets", "/assets");
 setUse("/service-worker.js", "/public/service-worker.js");
+setUse("/reloader.js", "/public/reloader.js");
 setUse("/firebase.js", "/public/firebase.js");
 setUse("/notifications.js", "/public/notifications.js");
 setUse("/profile.css", "/public/profile.css");
