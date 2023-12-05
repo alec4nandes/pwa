@@ -5,10 +5,10 @@ const admin = require("firebase-admin"),
     client = new CloudTasksClient();
 
 // Every midnight PST the Cloud Scheduler calls this function:
-async function scheduledPush() {
+async function scheduledPush(advance) {
     const data = await getUsersData();
     for (const datum of data) {
-        await uposathaPush(datum);
+        await uposathaPush({ ...datum, advance });
     }
 }
 
@@ -27,7 +27,7 @@ async function uposathaPush({ coordinates, subscription, advance }) {
     }
     const date = getAdvancedDateString(advance),
         sun = await getSunData(coordinates, date),
-        timezone = sun.utc_offset / 60,
+        timezone = sun.results.utc_offset / 60,
         moon = await getMoonData(coordinates, date, timezone),
         { data: moonData } = moon.properties,
         phase = moonData.curphase,
@@ -70,7 +70,7 @@ async function getSunData(coordinates, date) {
 
 async function getMoonData(coordinates, date, timezone) {
     const { latitude: lat, longitude: lng } = coordinates,
-        root = "https://aa.usno.navy.mil/api/rstt/oneday/",
+        root = "https://aa.usno.navy.mil/api/rstt/oneday",
         query = `?date=${date}&coords=${lat},${lng}&tz=${timezone}`,
         url = root + query;
     return await (await fetch(url)).json();
@@ -89,7 +89,7 @@ function parseDate(date, time, timezone) {
     let [h, m, s] = t.split(":");
     const is12 = +h === 12;
     h = ((isAm ? (is12 ? 0 : h) : is12 ? h : +h + 12) + "").padStart(2, "0");
-    const isNeg = offset < 0 ? "-" : "+",
+    const isNeg = timezone < 0 ? "-" : "+",
         offset = isNeg + (Math.abs(timezone) * 100 + "").padStart(4, "0"),
         dateString = `${y}-${mt}-${d}T${h}:${m}:${s}${offset}`;
     return new Date(dateString);
