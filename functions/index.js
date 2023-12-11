@@ -20,6 +20,8 @@ setUse("/service-worker.js", "/public/service-worker.js");
 setUse("/reloader.js", "/public/reloader.js");
 setUse("/firebase.js", "/public/firebase.js");
 setUse("/notifications.js", "/public/notifications.js");
+setUse("/random-sutta.js", "/public/sutta/random.js");
+setUse("/uids.js", "/public/sutta/uids.js");
 setUse("/profile.css", "/public/profile.css");
 const pwaFilesInIndex = [
     "apple-touch-icon.png",
@@ -38,6 +40,9 @@ app.set("view engine", "pug");
 
 app.get("/", (req, res) => mustHaveToken(req, res, true));
 app.get("/profile", (req, res) => mustHaveToken(req, res, false));
+app.get("/sutta", (req, res) => {
+    res.sendFile(path.join(__dirname, "/public/sutta/index.html"));
+});
 
 async function mustHaveToken(req, res, isHome) {
     const token = readToken(req),

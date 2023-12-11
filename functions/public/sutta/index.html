@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sutta</title>
+    </head>
+    <body>
+        <a href="./">HOME</a>
+        <button id="get-sutta">GET RANDOM SUTTA</button>
+        <nav></nav>
+        <pre id="sutta"></pre>
+
+        <script type="module">
+            import {getRandomSutta} from "./random-sutta.js"
+            document
+                .querySelector("#get-sutta")
+                .onclick = getRandomSutta;
+        </script>
+    </body>
+</html>
