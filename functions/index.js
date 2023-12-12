@@ -23,6 +23,7 @@ setUse("/notifications.js", "/public/notifications.js");
 setUse("/random-sutta.js", "/public/sutta/random.js");
 setUse("/uids.js", "/public/sutta/uids.js");
 setUse("/profile.css", "/public/profile.css");
+setUse("/sutta.css", "/public/sutta/sutta.css");
 const pwaFilesInIndex = [
     "apple-touch-icon.png",
     "favicon-32x32.png",

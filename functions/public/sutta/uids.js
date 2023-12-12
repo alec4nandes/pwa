@@ -3766,4 +3766,35 @@ const uids = [
     { uid: "thig15.1", authors: ["sujato", "soma"] },
     { uid: "thig16.1", authors: ["sujato", "soma"] },
 ];
+
+const authors = {
+    sujato: "Bhikkhu Sujato",
+    bodhi: "Bhikkhu Bodhi",
+    thanissaro: "Thanissaro Bhikkhu",
+    woodward: "Frank Lee Woodward",
+    "nyanamoli-thera": "Nyanamoli Thera",
+    horner: "I.B. Horner",
+    soma: "Ayya Soma",
+    suddhaso: "Suddhāso Bhikkhu",
+    anandajoti: "Bhikkhu Ānandajoti",
+    nizamis: "K. Nizamis",
+    tw_rhysdavids: "T.W. Rhys Davids",
+    caf_rhysdavids: "C.A.F. Rhys Davids",
+    olendzki: "Andrew Olendzki",
+    hare: "E.M. Hare",
+    "tw-caf_rhysdavids": "T.W. & C.A.F. Rhys Davids",
+    "hecker-khema": "Dr. Hellmuth Hecker, Ayya Khema",
+    "nhat_hanh-laity": "Thích Nhất Hạnh, Annabel Laity",
+    mills: "Laurence Khantipalo Mills",
+    nyanamoli: "Bhikkhu Ñāṇamoli",
+    kumara: "Bhikkhu Kumāra",
+    ypg: "Yahoo! Pali Group",
+    "mills-sujato": "Laurence Khantipalo Mills, Bhikkhu Sujato",
+    "kelly-sawyer-yareham": "Kelly, Sawyer, Yareham",
+    "narada-mahinda": "Nārada Thera, Mahinda Thera",
+    "rhysdavids-brasington": "T.W. Rhys Davids, Leigh Brasington",
+    kovilo: "Kovilo Bhikkhu",
+};
+
 export default uids;
+export { authors };
