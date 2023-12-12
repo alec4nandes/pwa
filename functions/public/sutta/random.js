@@ -66,11 +66,30 @@ function formatLegacyText(data, author) {
                 .map((line) => line.innerHTML?.trim())
                 .map((line, i) => `<h${i + 2}>${line}</h${i + 2}>`)
                 .join("") + `<em>by ${authors[author]}</em>`,
-        lines = [...div.querySelectorAll("p")]
-            .map((line) => `<p>${line.innerHTML}</p>`)
+        lines = [...div.querySelectorAll("p")],
+        copyrightIndex = getCopyrightIndex(lines),
+        formattedLines = lines
+            .map((line, i) => {
+                if (i < copyrightIndex) {
+                    // remove all links
+                    [...line.querySelectorAll("a")].forEach((link) =>
+                        link.remove()
+                    );
+                }
+                return `<p>${line.innerHTML}</p>`;
+            })
             .join("");
     document.querySelector("#title").innerHTML = title;
-    document.querySelector("#sutta").innerHTML = lines;
+    document.querySelector("#sutta").innerHTML = formattedLines;
+}
+
+function getCopyrightIndex(lines) {
+    for (let i = 0; i < lines.length; i++) {
+        if (lines[i].innerHTML.includes("©")) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 function getNavButtons(info, author) {
