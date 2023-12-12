@@ -86,8 +86,13 @@ const schedule = functions.pubsub
         return scheduledPush();
     });
 
+// const testing = functions.pubsub.schedule("* * * * *").onRun((context) => {
+//     return scheduledPush(undefined, true);
+// });
+
 module.exports = {
     express: functions.https.onRequest(app),
     push: functions.https.onRequest(pushApi),
     schedule,
+    // testing,
 };

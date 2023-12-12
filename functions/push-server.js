@@ -17,10 +17,10 @@ pushApi.use(bodyParser.json());
 
 pushApi.post("/", (req, res) => {
     try {
-        const { subscription, message } = req.body;
+        const { subscription, text } = req.body;
         console.log("PUSH NOTIFICATION");
         console.log(subscription);
-        webpush.sendNotification(subscription, message);
+        webpush.sendNotification(subscription, JSON.stringify(text));
         res.json({ message: "message sent" });
     } catch (err) {
         console.error(err);

@@ -1,10 +1,11 @@
 import { auth } from "./database.js";
 import { getIdToken, onAuthStateChanged } from "firebase/auth";
 
-const cacheName = "cache10",
+const cacheName = "cache13",
     precachedAssets = [];
 
 self.addEventListener("install", (event) => {
+    self.skipWaiting();
     event.waitUntil(
         caches.open(cacheName).then((cache) => {
             return cache.addAll(precachedAssets);
@@ -97,12 +98,9 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("push", function (event) {
     if (event.data) {
-        console.log("Push event:", event.data.text());
-        showLocalNotification(
-            "Today is Uposatha",
-            event.data.text(),
-            self.registration
-        );
+        const { title, message } = JSON.parse(event.data.text());
+        console.log(`Push event: Title: ${title} ... Message: ${message}`);
+        showLocalNotification(title, message, self.registration);
     } else {
         console.warn("Push event, but no data.");
     }

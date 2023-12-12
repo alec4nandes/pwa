@@ -1,4 +1,4 @@
-const IS_DEVELOPMENT = false;
+const IS_DEVELOPMENT = true;
 
 // PWA can get stale when active in the background after opening
 // from a device's home screen, so reload every hour in case

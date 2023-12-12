@@ -5,10 +5,10 @@ const admin = require("firebase-admin"),
     client = new CloudTasksClient();
 
 // Every midnight PST the Cloud Scheduler calls this function:
-async function scheduledPush(advance) {
+async function scheduledPush(advance, testing) {
     const data = await getUsersData();
     for (const datum of data) {
-        await uposathaPush({ ...datum, advance });
+        await uposathaPush({ ...datum, advance, testing });
     }
 }
 
@@ -18,10 +18,19 @@ async function getUsersData() {
     return subscriptions;
 }
 
+async function uposathaPush({ coordinates, subscription, advance, testing }) {
+    const pushData = await getPushData({ coordinates, advance, testing });
+    if (pushData) {
+        for (const { text, seconds } of Object.values(pushData)) {
+            await addTask({ subscription, text, seconds });
+        }
+    }
+}
+
 // FULL & NEW MOON ALERTS
 // On the days of full and new moons, send push alerts for both sunrise and sunset
 
-async function uposathaPush({ coordinates, subscription, advance }) {
+async function getPushData({ coordinates, advance, testing }) {
     if (!coordinates) {
         return;
     }
@@ -31,22 +40,24 @@ async function uposathaPush({ coordinates, subscription, advance }) {
         moon = await getMoonData(coordinates, date, timezone),
         { data: moonData } = moon.properties,
         phase = moonData.curphase,
-        proceed = ["New Moon", "Full Moon"].includes(phase);
+        proceed = testing || ["New Moon", "Full Moon"].includes(phase);
     if (!proceed) {
         return;
     }
     const { sunrise, sunset } = sun.results,
-        phaseTime = moonData.closestphase.time;
+        phaseTime = moonData.closestphase.time,
+        result = {};
     for (const [status, time] of Object.entries({ sunrise, sunset })) {
         const isSunrise = status === "sunrise",
-            message = `${phase.toUpperCase()} UPOSATHA ${
-                isSunrise ? "BEGINS" : "ENDS"
-            }
-            ${isSunrise ? `Sunrise: ${sunrise} / ` : ""}Sunset: ${sunset}
-            ${phase}: ${phaseTime}`,
-            seconds = getSecondsInAdvance(date, time, timezone);
-        await addTask({ subscription, message, seconds });
+            title = `${phase} Uposatha ${isSunrise ? "Starts" : "Ends"}`,
+            message = `${
+                isSunrise ? `Sunrise: ${formatTime(sunrise)} / ` : ""
+            }Sunset: ${formatTime(sunset)}
+${phase}: ${formatPhaseTime(phaseTime)}`,
+            seconds = testing ? 0 : getSecondsInAdvance(date, time, timezone);
+        result[status] = { text: { title, message }, seconds };
     }
+    return result;
 }
 
 // check 3 days ahead to make sure all timezones are included
@@ -76,6 +87,20 @@ async function getMoonData(coordinates, date, timezone) {
     return await (await fetch(url)).json();
 }
 
+function formatTime(sunTime) {
+    const [time, amPm] = sunTime.split(" "),
+        [hour, min] = time.split(":");
+    return `${hour}:${min} ${amPm}`;
+}
+
+function formatPhaseTime(phaseTime) {
+    let [hour, min] = phaseTime.split(":");
+    hour = +hour;
+    const amPm = hour < 12 ? "AM" : "PM";
+    hour = hour ? (hour > 12 ? hour % 12 : hour) : 12;
+    return `${hour}:${min} ${amPm}`;
+}
+
 function getSecondsInAdvance(date, time, timezone) {
     const then = parseDate(date, time, timezone),
         now = new Date();
@@ -99,14 +124,14 @@ function getSecondsBetween(date1, date2) {
     return (date1.getTime() - date2.getTime()) / 1000;
 }
 
-async function addTask({ subscription, message, seconds }) {
+async function addTask({ subscription, text, seconds }) {
     const project = "express-10101",
         location = "us-central1",
         queue = "my-queue",
         // Construct the fully qualified queue name.
         parent = client.queuePath(project, location, queue),
         url = "https://us-central1-express-10101.cloudfunctions.net/push",
-        payload = { subscription, message },
+        payload = { subscription, text },
         task = {
             httpRequest: {
                 url,
