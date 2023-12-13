@@ -1,5 +1,7 @@
 import uids, { authors } from "./uids.js";
 
+document.querySelector("#get-sutta").onclick = getRandomSutta;
+
 function getRandomSutta() {
     getSutta(getRandom(uids));
 }
@@ -98,17 +100,17 @@ function getNavButtons(info, author) {
         next = uids[index + 1],
         prevBtn = document.createElement("button"),
         nextBtn = document.createElement("button"),
-        navElem = document.querySelector("nav");
-    navElem.innerHTML = "";
+        prevNextElem = document.querySelector("#prev-next-btns");
+    prevNextElem.innerHTML = "";
     if (prev?.authors.includes(author)) {
-        prevBtn.textContent = "PREVIOUS";
+        prevBtn.textContent = "previous";
         prevBtn.onclick = () => getSutta(prev, author);
-        navElem.appendChild(prevBtn);
+        prevNextElem.appendChild(prevBtn);
     }
     if (next?.authors.includes(author)) {
-        nextBtn.textContent = "NEXT";
+        nextBtn.textContent = "next";
         nextBtn.onclick = () => getSutta(next, author);
-        navElem.appendChild(nextBtn);
+        prevNextElem.appendChild(nextBtn);
     }
 }
 

@@ -20,10 +20,10 @@ setUse("/service-worker.js", "/public/service-worker.js");
 setUse("/reloader.js", "/public/reloader.js");
 setUse("/firebase.js", "/public/firebase.js");
 setUse("/notifications.js", "/public/notifications.js");
-setUse("/random-sutta.js", "/public/sutta/random.js");
-setUse("/uids.js", "/public/sutta/uids.js");
-setUse("/profile.css", "/public/profile.css");
-setUse("/sutta.css", "/public/sutta/sutta.css");
+setUse("/random-sutta.js", "/public/random-sutta.js");
+setUse("/style.css", "/public/css/style.css");
+setUse("/profile.css", "/public/css/profile.css");
+setUse("/sutta.css", "/public/css/sutta.css");
 const pwaFilesInIndex = [
     "apple-touch-icon.png",
     "favicon-32x32.png",
@@ -33,33 +33,43 @@ const pwaFilesInIndex = [
     "favicon.ico",
     "mstile-144x144.png",
     "browserconfig.xml",
-    "style.css",
     "android-chrome-144x144.png",
 ];
 pwaFilesInIndex.forEach((file) => setUse(`/${file}`, `/pwa/${file}`));
 app.set("view engine", "pug");
 
-app.get("/", (req, res) => mustHaveToken(req, res, true));
-app.get("/profile", (req, res) => mustHaveToken(req, res, false));
-app.get("/sutta", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/sutta/index.html"));
-});
+app.get("/", (req, res) => mustHaveToken(req, res, true, "profile"));
+app.get("/profile", (req, res) => mustHaveToken(req, res, false, "profile"));
+app.get("/sutta", (req, res) => mustHaveToken(req, res, false, "sutta"));
+app.get("/resources", (req, res) =>
+    mustHaveToken(req, res, false, "resources")
+);
+app.get("/podcasts", (req, res) => mustHaveToken(req, res, false, "podcasts"));
+app.get("/pali", (req, res) => mustHaveToken(req, res, false, "pali"));
 
-async function mustHaveToken(req, res, isHome) {
+async function mustHaveToken(req, res, isHome, fileName) {
+    const { email, email_verified } = await getEmailInfo(req);
+    if (email && email_verified) {
+        isHome
+            ? res.redirect(`./${fileName}`)
+            : res.render(
+                  path.join(__dirname, `/public/templates/${fileName}.pug`),
+                  {
+                      email,
+                  }
+              );
+    } else {
+        isHome
+            ? res.sendFile(path.join(__dirname, "/public/templates/index.html"))
+            : res.redirect("./");
+    }
+}
+
+async function getEmailInfo(req) {
     const token = readToken(req),
         user = token && (await getUserFromToken(token)),
         { email, email_verified } = user || {};
-    if (email && email_verified) {
-        isHome
-            ? res.redirect("./profile")
-            : res.render(path.join(__dirname, "/public/profile.pug"), {
-                  email,
-              });
-    } else {
-        isHome
-            ? res.sendFile(path.join(__dirname, "/public/index.html"))
-            : res.redirect("./");
-    }
+    return { email, email_verified };
 }
 
 function readToken(req) {

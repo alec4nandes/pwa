@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sutta</title>
+        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="./sutta.css">
+        <script src="./firebase.js" defer></script>
+        <script src="./random-sutta.js" defer></script>
+    </head>
+    <body>
+        include ./nav
+        <main>
+            <h1>Sutta</h1>
+            <div id="links">
+                <a href="./">Uposatha</a>
+                <span>|</span>
+                <a href="./resources">Resources</a>
+                <span>|</span>
+                <a href="./podcasts">Podcasts</a>
+                <span>|</span>
+                <a href="./pali">Learn Pali</a>
+            </div>
+            <br/>
+            <hr/>
+            <br/>
+            <button id="get-sutta">get random sutta</button>
+            <div id="prev-next-btns"></div>
+            <div id="title"></div>
+            <div id="sutta"></div>
+        </main>
+    </body>
+</html>

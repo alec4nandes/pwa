@@ -27,8 +27,6 @@ async function toggle(status) {
     elem("subscribe").style.display = isGranted ? "none" : "block";
     elem("unsubscribe").style.display = isGranted ? "block" : "none";
     if (isGranted) {
-        const message = "Subscribed to push notifications for data at:";
-        elem("unsubscribe").querySelector("p").textContent = message;
         elem("db-lat").textContent = latitude;
         elem("db-lng").textContent = longitude;
     } else {

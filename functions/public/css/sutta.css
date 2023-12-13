@@ -1,16 +1,8 @@
-body {
-    background-color: #111;
-    color: #eee;
-    margin: 50px 15px;
-    text-align: center;
-}
-
-#title {
-    margin: 20px auto;
-
-    & > * {
-        margin: 0 auto;
-    }
+#prev-next-btns {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    padding: 5px;
 }
 
 #sutta {
@@ -31,5 +23,13 @@ body {
         &:last-child {
             text-align: left;
         }
+    }
+}
+
+#title {
+    margin: 20px auto;
+
+    & > * {
+        margin: 0 auto;
     }
 }
