@@ -1,12 +1,12 @@
 {
-	"name": "Simple PWA",
-	"short_name": "Simple PWA",
-	"display": "standalone",
-	"start_url": "./?utm_source=pwa_install",
-	"scope": ".",
-	"theme_color": "#000",
-	"background_color": "#000",
-	"icons":[
+    "name": "Uposatha",
+    "short_name": "Uposatha",
+    "display": "standalone",
+    "start_url": "./",
+    "scope": ".",
+    "theme_color": "#000",
+    "background_color": "#000",
+    "icons": [
         {
             "src": "android-chrome-36x36.png",
             "sizes": "36x36",
@@ -58,5 +58,5 @@
             "type": "image/png",
             "purpose": "maskable"
         }
-	]
+    ]
 }

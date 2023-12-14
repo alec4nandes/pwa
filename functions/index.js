@@ -17,7 +17,8 @@ const app = express(),
 
 setUse("/assets", "/assets");
 setUse("/service-worker.js", "/public/service-worker.js");
-setUse("/reloader.js", "/public/reloader.js");
+setUse("/splash.js", "/public/splash.js");
+setUse("/welcome.js", "/public/welcome.js");
 setUse("/firebase.js", "/public/firebase.js");
 setUse("/notifications.js", "/public/notifications.js");
 setUse("/random-sutta.js", "/public/random-sutta.js");
@@ -38,6 +39,9 @@ const pwaFilesInIndex = [
 pwaFilesInIndex.forEach((file) => setUse(`/${file}`, `/pwa/${file}`));
 app.set("view engine", "pug");
 
+app.get("/welcome", (req, res) =>
+    res.sendFile(path.join(__dirname, "/public/templates/welcome.html"))
+);
 app.get("/", (req, res) => mustHaveToken(req, res, true, "profile"));
 app.get("/profile", (req, res) => mustHaveToken(req, res, false, "profile"));
 app.get("/sutta", (req, res) => mustHaveToken(req, res, false, "sutta"));

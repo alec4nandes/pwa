@@ -10,23 +10,14 @@ setTimeout(() => {
 const isDownloaded =
     IS_DEVELOPMENT || !!window.matchMedia("(display-mode: standalone)").matches;
 
-// when restarting the app, not just refreshing
+// logic for when restarting the app, not just refreshing
 if (pageIsReloaded()) {
-    if (isDownloaded) {
-        document.querySelector("#login").style.display = "block";
-    } else {
-        showWelcome();
-        showInstallInstructions();
-    }
+    document.querySelector("#login").style.display = "block";
 } else {
-    showWelcome();
-    if (isDownloaded) {
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-    } else {
-        showInstallInstructions();
-    }
+    showSplash();
+    setTimeout(() => {
+        window.location.reload();
+    }, 2000);
 }
 
 function pageIsReloaded() {
@@ -40,11 +31,7 @@ function pageIsReloaded() {
     return false;
 }
 
-function showWelcome() {
+function showSplash() {
     document.body.style.overflow = "hidden";
-    document.querySelector("#welcome").style.display = "flex";
-}
-
-function showInstallInstructions() {
-    document.querySelector("#install").style.display = "block";
+    document.querySelector("#splash-screen").style.display = "flex";
 }

@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Uposatha Reminders</title>
-        <link rel="canonical" href="https://simplepwa.com"/>
+        <title>Uposatha</title>
+
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Icons and Colors -->
@@ -52,26 +52,13 @@
                     .catch(err => console.error("Service Worker not registered:", err));
             }
         </script>
-        <script src="reloader.js" defer></script>
+        <script src="./welcome.js"></script>
+        <script src="splash.js" defer></script>
         <script src="firebase.js" defer></script>
     </head>
     <body>
-        <div id="welcome" class="vertical-flex" style="display: none">
-            <div class="container">
-                <h1>Welcome!</h1>
-                <div id="install" style="display: none">
-                    <p>
-                        You must download this web app to your device
-                        to receive push notification reminders.
-                        Follow these downloading directions:
-                        ...
-                    </p>
-                    <p>
-                        Did you download, but you're still seeing this message? Please click this button: 
-                        <button onclick="window.location.reload()">refresh page</button>
-                    </p>
-                </div>
-            </div>
+        <div id="splash-screen" class="vertical-flex" style="display: none">
+            <h1>SPLASH</h1>
         </div>
 
         <main id="login" style="display: none">

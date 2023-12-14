@@ -1,55 +1,39 @@
-// TODO: implement welcome screen
+const isWelcome = new URL(window.location.href).pathname.includes("welcome");
 
-const IS_DEVELOPMENT = false;
-
-// PWA can get stale when active in the background after opening
-// from a device's home screen, so reload every hour in case
-// there are page updates.
-// TODO: is this necessary? Also: develop better cache solution!
-setTimeout(() => {
-    window.location.reload();
-}, 1000 * 60 * 60);
-
-const isDownloaded =
-    IS_DEVELOPMENT || !!window.matchMedia("(display-mode: standalone)").matches;
-
-// when restarting the app, not just refreshing
-if (pageIsReloaded()) {
-    if (!isDownloaded) {
-        showWelcome();
-        showInstallInstructions();
+if (isWelcome) {
+    if (getIsDownloaded()) {
+        window.location.assign("./");
+    } else {
+        const installBtn = document.querySelector("#install-app");
+        if (window.BeforeInstallPromptEvent) {
+            // register event listener
+            window.addEventListener("beforeinstallprompt", (e) => {
+                e.preventDefault();
+                installBtn.onclick = () => {
+                    console.log("Installing app...");
+                    e.prompt();
+                };
+            });
+        } else {
+            installBtn.onclick = showInstallInstructions;
+        }
     }
 } else {
-    showWelcome();
-    if (isDownloaded) {
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-    } else {
-        showInstallInstructions();
+    if (!getIsDownloaded()) {
+        // check if installed and if not, redirect to welcome
+        window.location.assign("./welcome");
     }
 }
 
-function pageIsReloaded() {
-    if (window.performance) {
-        console.info("window.performance works");
-        const { type } = window.performance.getEntries()[0],
-            isReload = type === "reload";
-        console.info(`This page is ${isReload ? "" : "not "}reloaded.`);
-        return isReload;
-    }
-    return false;
-}
-
-function showWelcome() {
-    document.querySelector("#welcome").style.display = "block";
+function getIsDownloaded() {
+    const IS_DEVELOPMENT = false;
+    return (
+        IS_DEVELOPMENT ||
+        !!window.matchMedia("(display-mode: standalone)").matches
+    );
 }
 
 function showInstallInstructions() {
-    document.querySelector("#install").innerHTML = `
-        You must download this web app to your device
-        to receive push notification reminders.
-        Follow these downloading directions:
-        ...
-    `;
+    // document.querySelector("#install-steps").style.display = "block";
+    alert("INSTALL INSTRUCTIONS POPUP");
 }
