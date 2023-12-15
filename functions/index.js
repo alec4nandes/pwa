@@ -34,7 +34,16 @@ const pwaFilesInIndex = [
     "favicon.ico",
     "mstile-144x144.png",
     "browserconfig.xml",
+    "android-chrome-36x36.png",
+    "android-chrome-48x48.png",
+    "android-chrome-72x72.png",
+    "android-chrome-96x96.png",
     "android-chrome-144x144.png",
+    "android-chrome-192x192.png",
+    "android-chrome-256x256.png",
+    "android-chrome-384x384.png",
+    "android-chrome-512x512.png",
+    "maskable_icon.png",
 ];
 pwaFilesInIndex.forEach((file) => setUse(`/${file}`, `/pwa/${file}`));
 app.set("view engine", "pug");

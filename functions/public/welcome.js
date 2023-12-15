@@ -6,9 +6,14 @@ if (isWelcome) {
     } else {
         const installBtn = document.querySelector("#install-app");
         if (window.BeforeInstallPromptEvent) {
-            // register event listener
+            // add default behavior in case app is already installed.
+            installBtn.onclick = () => {
+                alert("This app seems to be installed already.");
+            };
+            // register event listener (won't register if already installed)
             window.addEventListener("beforeinstallprompt", (e) => {
                 e.preventDefault();
+                console.log("This app can be installed.");
                 installBtn.onclick = () => {
                     console.log("Installing app...");
                     e.prompt();
