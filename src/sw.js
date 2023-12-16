@@ -1,7 +1,7 @@
 import { auth } from "./database.js";
 import { getIdToken, onAuthStateChanged } from "firebase/auth";
 
-const cacheName = "cache14";
+const cacheName = "cache20";
 
 const assets = [
     "android-chrome-36x36.png", // Favicon, Android Chrome M39+ with 0.75 screen density
@@ -94,15 +94,14 @@ async function fetcher(event) {
                 referrer: req.referrer,
                 body,
             })
-        ).then(async (res) => {
-            const isLogin =
-                req.url.split("/").filter(Boolean).at(-1) === "express";
-            !isLogin &&
-                (await caches.open(cacheName).then((cache) => {
-                    cache.put(req, res.clone());
-                }));
-            return res;
-        });
+        );
+        // dynamic cache:
+        // .then(async (res) => {
+        //     await caches.open(cacheName).then((cache) => {
+        //         cache.put(req, res.clone());
+        //     });
+        //     return res;
+        // });
     } else {
         return fetch(req);
     }

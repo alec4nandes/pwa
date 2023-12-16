@@ -17,8 +17,8 @@ const app = express(),
 
 setUse("/assets", "/assets");
 setUse("/firebase.js", "/public/firebase.js");
+setUse("/moon.css", "/public/css/moon.css");
 setUse("/notifications.js", "/public/notifications.js");
-setUse("/profile.css", "/public/css/profile.css");
 setUse("/random-sutta.js", "/public/random-sutta.js");
 setUse("/register-sw.js", "/public/register-sw.js");
 setUse("/service-worker.js", "/public/service-worker.js");

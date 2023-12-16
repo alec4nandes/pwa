@@ -67,7 +67,10 @@
                 <br/>
                 <button id="unsub-btn">unsubscribe</button>
             </div>
-            <p id="offline"><em>You are currently offline.</em></p>
+            <div id="offline" style="display: none">
+                <p><em>You are currently offline.</em></p>
+                <button onclick="window.location.reload()">refresh page</button>
+            </div>
         </main>
     </body>
 </html>
