@@ -16,15 +16,16 @@ const app = express(),
         app.use(desiredPath, express.static(path.join(__dirname, realPath)));
 
 setUse("/assets", "/assets");
-setUse("/service-worker.js", "/public/service-worker.js");
-setUse("/splash.js", "/public/splash.js");
-setUse("/welcome.js", "/public/welcome.js");
 setUse("/firebase.js", "/public/firebase.js");
 setUse("/notifications.js", "/public/notifications.js");
-setUse("/random-sutta.js", "/public/random-sutta.js");
-setUse("/style.css", "/public/css/style.css");
 setUse("/profile.css", "/public/css/profile.css");
+setUse("/random-sutta.js", "/public/random-sutta.js");
+setUse("/register-sw.js", "/public/register-sw.js");
+setUse("/service-worker.js", "/public/service-worker.js");
+setUse("/splash.js", "/public/splash.js");
+setUse("/style.css", "/public/css/style.css");
 setUse("/sutta.css", "/public/css/sutta.css");
+setUse("/welcome.js", "/public/welcome.js");
 const pwaFilesInIndex = [
     "apple-touch-icon.png",
     "favicon-32x32.png",
@@ -48,8 +49,14 @@ const pwaFilesInIndex = [
 pwaFilesInIndex.forEach((file) => setUse(`/${file}`, `/pwa/${file}`));
 app.set("view engine", "pug");
 
+const title = "Uposatha",
+    description = "Buddhist resources and Uposatha reminders.";
+
 app.get("/welcome", (req, res) =>
-    res.sendFile(path.join(__dirname, "/public/templates/welcome.html"))
+    res.render(path.join(__dirname, "/public/templates/welcome.pug"), {
+        title,
+        description,
+    })
 );
 app.get("/", (req, res) => mustHaveToken(req, res, true, "profile"));
 app.get("/profile", (req, res) => mustHaveToken(req, res, false, "profile"));
@@ -69,11 +76,16 @@ async function mustHaveToken(req, res, isHome, fileName) {
                   path.join(__dirname, `/public/templates/${fileName}.pug`),
                   {
                       email,
+                      title,
+                      description,
                   }
               );
     } else {
         isHome
-            ? res.sendFile(path.join(__dirname, "/public/templates/index.html"))
+            ? res.render(path.join(__dirname, "/public/templates/index.pug"), {
+                  title,
+                  description,
+              })
             : res.redirect("./");
     }
 }
