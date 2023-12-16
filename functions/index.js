@@ -27,7 +27,6 @@ setUse("/style.css", "/public/css/style.css");
 setUse("/sutta.css", "/public/css/sutta.css");
 setUse("/welcome.js", "/public/welcome.js");
 const pwaFilesInIndex = [
-    "/",
     "android-chrome-36x36.png", // Favicon, Android Chrome M39+ with 0.75 screen density
     "android-chrome-48x48.png", // Favicon, Android Chrome M39+ with 1.0 screen density
     "android-chrome-72x72.png", // Favicon, Android Chrome M39+ with 1.5 screen density
