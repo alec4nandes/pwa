@@ -76,6 +76,7 @@ app.get("/welcome", (req, res) =>
 );
 app.get("/", (req, res) => mustHaveToken(req, res, true, "profile"));
 app.get("/profile", (req, res) => mustHaveToken(req, res, false, "profile"));
+app.get("/moon", (req, res) => mustHaveToken(req, res, false, "moon"));
 app.get("/sutta", (req, res) => mustHaveToken(req, res, false, "sutta"));
 app.get("/resources", (req, res) =>
     mustHaveToken(req, res, false, "resources")

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        include ./metatags
+        <link rel="stylesheet" href="./moon.css">
+        <script src="firebase.js" defer></script>
+        <script src="notifications.js" defer></script>
+    </head>
+    <body>
+        include ./nav
+        <main>
+            <h1>Moon Reminders</h1>
+            <div id="links">
+                <a href="./sutta">Suttas</a>
+                <span>|</span>
+                <a href="./resources">Resources</a>
+                <span>|</span>
+                <a href="./podcasts">Podcasts</a>
+                <span>|</span>
+                <a href="./pali">Learn Pali</a>
+            </div>
+            <br/>
+            <hr/>
+            <h2>Get Moon Reminders</h2>
+            <p>Uposatha are days of meditation and reflection that fall on the full and new moons. Observance lasts from sunrise to sunset and involves practices such as fasting and abstaining from smoking and alcohol.</p>
+            <p>To get the most accurate sunrise and sunset times, please enter the coordinates of the location where you would like to practice. You will then receive push notifications at sunup and sundown on the dates of the new and full moons where you're located.</p>
+            <div id="subscribe" style="display: none">
+                <table id="coords-table">
+                    <tr>
+                        <td colspan="2">
+                            <button id="coords-btn">detect coordinates</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="lat">latitude:</label>
+                        </td>
+                        <td>
+                            <input id="lat" value="0" type="number" min="-180" max="180" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="lng">longitude:</label>
+                        </td>
+                        <td>
+                            <input id="lng" value="0" type="number" min="-180" max="180" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><button id="notify-btn">get notifications</button></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="unsubscribe" style="display: none">
+                <p>Subscribed to push notifications for data at:</p>
+                <table id="coords-table">
+                    <tr>
+                        <td>latitude:</td>
+                        <td id="db-lat"></td>
+                    </tr>
+                    <tr>
+                        <td>longitude:</td>
+                        <td id="db-lng"></td>
+                    </tr>
+                </table>
+                <br/>
+                <button id="unsub-btn">unsubscribe</button>
+            </div>
+            <p id="offline"><em>You are currently offline.</em></p>
+        </main>
+    </body>
+</html>

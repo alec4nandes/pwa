@@ -94,7 +94,15 @@ async function fetcher(event) {
                 referrer: req.referrer,
                 body,
             })
-        );
+        ).then(async (res) => {
+            const isLogin =
+                req.url.split("/").filter(Boolean).at(-1) === "express";
+            !isLogin &&
+                (await caches.open(cacheName).then((cache) => {
+                    cache.put(req, res.clone());
+                }));
+            return res;
+        });
     } else {
         return fetch(req);
     }
