@@ -42,10 +42,3 @@ function showInstallInstructions() {
     // document.querySelector("#install-steps").style.display = "block";
     alert("INSTALL INSTRUCTIONS POPUP");
 }
-
-// show offline messages
-if (!window.navigator.onLine) {
-    [...document.querySelectorAll("#offline")].forEach(
-        (elem) => (elem.style.display = "block")
-    );
-}

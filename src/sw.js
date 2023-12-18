@@ -1,7 +1,7 @@
 import { auth } from "./database.js";
 import { getIdToken, onAuthStateChanged } from "firebase/auth";
 
-const cacheName = "cache20";
+const cacheName = "cache31";
 
 const assets = [
     "android-chrome-36x36.png", // Favicon, Android Chrome M39+ with 0.75 screen density
