@@ -20,7 +20,11 @@ if (isWelcome) {
                 };
             });
         } else {
-            installBtn.onclick = showInstallInstructions;
+            const openDialog = document.querySelector("#install-app"),
+                dialog = document.querySelector("dialog"),
+                closeDialog = dialog.querySelector("#close");
+            openDialog.onclick = () => dialog.showModal();
+            closeDialog.onclick = () => dialog.close();
         }
     }
 } else {
@@ -36,9 +40,4 @@ function getIsDownloaded() {
         IS_DEVELOPMENT ||
         !!window.matchMedia("(display-mode: standalone)").matches
     );
-}
-
-function showInstallInstructions() {
-    // document.querySelector("#install-steps").style.display = "block";
-    alert("INSTALL INSTRUCTIONS POPUP");
 }

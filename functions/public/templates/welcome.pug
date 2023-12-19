@@ -9,13 +9,15 @@
         <br/>
         <hr/>
         <br/>
-        <p>
-            This web app is fully functional only when installed on your device.
-        </p>
+        <p>This web app is fully functional only when installed on your device.</p>
         <button id="install-app">install</button>
-        <p>
-            Are you in the installed app, but you're still seeing this message? Please click this button: 
-        </p>
+        <dialog>
+            <p>This app is meant for mobile devices and is not in the Play or App Stores.</p>
+            <p><em>To install, please use Chrome or Safari on your mobile device.</em></p>
+            <p>Look for the share icon <img id="share-icon" src="./assets/share-icon.png" /> and then select "Add to Home Screen".</p>
+            <button id="close">close</button>  
+        </dialog>
+        <p>Are you in the installed app, but you're still seeing this message? Please click this button:</p>
         <button onclick="window.location.reload()">refresh page</button>
     </body>
 </html>

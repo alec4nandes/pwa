@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "func": "firebase serve --only functions",
+        "func": "firebase serve --only functions -p 5001",
         "webpack": "npx webpack --watch"
     },
     "keywords": [],

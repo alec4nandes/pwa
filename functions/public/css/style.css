@@ -37,6 +37,18 @@ button {
     }
 }
 
+dialog {
+    background-color: lavender;
+    border-color: #b8b8e2;
+
+    & #share-icon {
+        height: 18px;
+        width: auto;
+        opacity: 0.7;
+        padding: 0 3px;
+    }
+}
+
 #email-display {
     font-style: italic;
 }

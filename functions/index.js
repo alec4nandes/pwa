@@ -15,7 +15,7 @@ const app = express(),
     setUse = (desiredPath, realPath) =>
         app.use(desiredPath, express.static(path.join(__dirname, realPath)));
 
-setUse("/assets", "/assets");
+setUse("/assets", "/public/assets");
 setUse("/firebase.js", "/public/firebase.js");
 setUse("/moon.css", "/public/css/moon.css");
 setUse("/notifications.js", "/public/notifications.js");
